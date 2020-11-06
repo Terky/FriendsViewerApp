@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIViewController {
+@nonobjc extension UIViewController {
     func add(_ child: UIViewController) {
         addChild(child)
         view.addSubview(child.view)

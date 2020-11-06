@@ -8,24 +8,36 @@
 import Foundation
 
 final class UserService {
-    func getUser(for token: String, then handler: @escaping (Result<User, UserError>) -> Void) {
-        let endpoint = Endpoint.getUser(token: token)
+    weak var authService: AuthenticationService!
+
+    init(authService: AuthenticationService) {
+        self.authService = authService
+    }
+
+    func getUser(id userId: String? = nil, then handler: ((Result<User, NetworkError>) -> Void)?) -> Void {
+        var endpoint = Endpoint.getUser(token: authService.token)
+
+        if let userId = userId {
+            endpoint = endpoint.appending(queryItem: URLQueryItem(name: "user_ids", value: userId))
+        }
 
         DataLoader.request(endpoint) { (loadingResult: Result<Data, NetworkError>) -> Void in
-            let result: Result<User, UserError>
+            let result: Result<User, NetworkError>
 
             switch loadingResult {
                 case .failure(let error):
-                    result = .failure(.internalError(description: error.localizedDescription))
+                    result = .failure(error)
                 case .success(let data):
-                    if let user = try? JSONDecoder().decode(Response<[User]>.self, from: data).response.first {
+                    if let user = Response<[User]>.decode(from: data)?.first {
                         result = .success(user)
                     } else {
-                        result = .failure(.userNotFound)
+                        result = .failure(.invalidDataFormat)
                     }
             }
 
-            handler(result)
+            DispatchQueue.main.async {
+                handler?(result)
+            }
         }
     }
 }

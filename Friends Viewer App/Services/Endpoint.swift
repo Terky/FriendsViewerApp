@@ -12,6 +12,10 @@ struct Endpoint {
     let host: String
     let path: String
     let queryItems: [URLQueryItem]
+
+    func appending(queryItem: URLQueryItem) -> Endpoint {
+        Endpoint(scheme: scheme, host: host, path: path, queryItems: queryItems + [queryItem])
+    }
 }
 
 extension Endpoint {

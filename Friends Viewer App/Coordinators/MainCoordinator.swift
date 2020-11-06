@@ -8,9 +8,9 @@
 import UIKit
 
 class MainCoordinator: Coordinator {
-    private let authService = AuthenticationService()
-    private let userService = UserService()
-    private let friendsService = FriendsService()
+    private lazy var authService = AuthenticationService()
+    private lazy var userService = UserService(authService: authService)
+    private lazy var friendsService = FriendsService(authService: authService)
 
     private(set) var navigationController: UINavigationController
 
@@ -32,14 +32,12 @@ class MainCoordinator: Coordinator {
         vc.coordinator = self
         vc.user = user
 
-        friendsService.getFriends(token: authService.token, for: user) { friendsRes in
-            DispatchQueue.main.async {
-                switch friendsRes {
-                    case .success(let friends):
-                        vc.friendsVC.users = friends
-                    case .failure(let error):
-                        fatalError(error.localizedDescription)
-                }
+        friendsService.getFriends(for: user) { friendsRes in
+            switch friendsRes {
+                case .success(let friends):
+                    vc.friendsVC.users = friends
+                case .failure(let error):
+                    fatalError(error.localizedDescription)
             }
         }
 
@@ -58,31 +56,40 @@ class MainCoordinator: Coordinator {
     }
 
     private func startUserScreen() {
-        let vc = UserViewController.instantiate()
-
-        vc.coordinator = self
-        userService.getUser(for: authService.token) { res in
-            DispatchQueue.main.async {
-                switch res {
-                case .success(let user):
-                    vc.user = user
-                    self.friendsService.getFriends(token: self.authService.token, for: user) { friendsRes in
-                        DispatchQueue.main.async {
-                            switch friendsRes {
-                                case .success(let friends):
-                                    vc.friendsVC.users = friends
-                                case .failure(let error):
-                                    fatalError(error.localizedDescription)
-                            }
-                        }
-                    }
-                case .failure(let error):
-                    fatalError(error.localizedDescription)
-                }
+        func unwrapResult<T>(input: Result<T, NetworkError>, then handler: ((T) -> Void)?) {
+            switch input {
+            case .success(let result):
+                handler?(result)
+            case .failure(let error):
+                fatalError(error.localizedDescription)
             }
         }
 
+        let vc = UserViewController.instantiate()
+
+        vc.coordinator = self
+
         navigationController.setViewControllers([vc], animated: false)
+
+        let job = userService.getUser >>>> unwrapResult >>>> { vc.user = $0; $1?($0) } >>>> friendsService.getFriends >>>> unwrapResult
+
+//        userService.getUser { res in
+//            if case .success(let user) = res {
+//                vc.user = user
+//                self.friendsService.getFriends(for: user) { friendsRes in
+//                    if case .success(let friends) = friendsRes {
+//                        vc.friendsVC.users = friends
+//                    } else if case .failure(let error) = friendsRes {
+//                        fatalError(error.localizedDescription)
+//                    }
+//                }
+//            } else if case .failure(let error) = res {
+//                fatalError(error.localizedDescription)
+//            }
+//        }
+        job?(nil) { result in
+            vc.friendsVC.users = result
+        }
     }
 }
 

@@ -19,7 +19,7 @@ extension Endpoint {
                 URLQueryItem(name: "display", value: "mobile"),
                 URLQueryItem(name: "scope", value: "offline+friends"),
                 URLQueryItem(name: "response_type", value: "token"),
-                URLQueryItem(name: "revoke", value: "1")
+//                URLQueryItem(name: "revoke", value: "1")
             ]
         )
     }

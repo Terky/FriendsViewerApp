@@ -13,33 +13,43 @@ class AuthenticationService {
 
     public private(set) var token: String!
 
-    public func authenticate(anchor vc: ASWebAuthenticationPresentationContextProviding, then handler: @escaping (Error?) -> Void) {
-        guard let authURL = Endpoint.auth().url else { fatalError("Invalid URL") }
+    public func authenticate(anchor vc: ASWebAuthenticationPresentationContextProviding, then handler: ((NetworkError?) -> Void)?) {
+        guard let authURL = Endpoint.auth().url else {
+            handler?(.invalidUrl)
+            return
+        }
 
-        session = ASWebAuthenticationSession.init(
-            url: authURL,
-            callbackURLScheme: AuthConstants.callbackURI,
-            completionHandler: { [weak self] (callBack: URL?, error: Error?) in
-                defer {
-                    handler(error)
+        session = ASWebAuthenticationSession(url: authURL, callbackURLScheme: AuthConstants.callbackURI) {
+            [weak self] (callBack: URL?, error: Error?) in
+            var resultError: NetworkError? = nil
+
+            defer {
+                DispatchQueue.main.async {
+                    handler?(resultError)
                 }
+            }
 
-                guard error == nil, let successURL = callBack else {
-                    print(error!.localizedDescription)
-                    return
-                }
+            guard error == nil, let successURL = callBack else {
+                resultError = .loadingError(error!)
+                return
+            }
 
-                let successURLComponents = URLComponents(string: successURL.absoluteString)
-                var components = URLComponents()
-                components.query = successURLComponents?.fragment
+            self?.token = self?.extractToken(from: successURL)
+        }
 
-                self?.token = components
-                    .queryItems?
-                    .first(where: { $0.name == "access_token" })?
-                    .value
-            })
-
+//        session?.prefersEphemeralWebBrowserSession = true
         session?.presentationContextProvider = vc
         session?.start()
+    }
+
+    private func extractToken(from url: URL) -> String? {
+        let inputComponents = URLComponents(string: url.absoluteString)
+        var components = URLComponents()
+        components.query = inputComponents?.fragment
+
+        return components
+            .queryItems?
+            .first(where: { $0.name == "access_token" })?
+            .value
     }
 }

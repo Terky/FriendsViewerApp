@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FriendsListViewController: UIViewController, Storyboarded {
+final class FriendsListViewController: UIViewController, Storyboarded {
     var coordinator: MainCoordinator?
 
     var users: [User]? {
@@ -16,9 +16,9 @@ class FriendsListViewController: UIViewController, Storyboarded {
         }
     }
 
-    var collectionView: UICollectionView!
+    private var collectionView: UICollectionView!
 
-    var dataSource: UICollectionViewDiffableDataSource<Int, User>?
+    private var dataSource: UICollectionViewDiffableDataSource<Int, User>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +29,13 @@ class FriendsListViewController: UIViewController, Storyboarded {
         updateDataSource(with: users)
     }
 
-    func createHierarcy() {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        print(collectionView.contentOffset)
+    }
+
+    private func createHierarcy() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: FriendsListViewController.createLayout())
 
         collectionView.backgroundColor = .systemBackground
@@ -40,7 +46,7 @@ class FriendsListViewController: UIViewController, Storyboarded {
         view.addSubview(collectionView)
     }
 
-    static func createLayout() -> UICollectionViewLayout {
+    private static func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                              heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -56,7 +62,7 @@ class FriendsListViewController: UIViewController, Storyboarded {
         return layout
     }
 
-    func createDataSource() {
+    private func createDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Int, User>(collectionView: collectionView) {
                collectionView, indexPath, item in
                let cell = collectionView
@@ -70,7 +76,7 @@ class FriendsListViewController: UIViewController, Storyboarded {
            }
     }
 
-    func updateDataSource(with items: [User]?) {
+    private func updateDataSource(with items: [User]?) {
         guard let users = items else {
             return
         }

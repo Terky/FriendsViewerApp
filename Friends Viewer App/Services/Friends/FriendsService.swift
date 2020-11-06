@@ -8,8 +8,14 @@
 import Foundation
 
 final class FriendsService {
-    func getFriends(token: String, for user: User, then handler: @escaping (Result<[User], NetworkError>) -> Void) {
-        let endpoint = Endpoint.getFriends(token: token, for: "\(user.id)")
+    weak var authService: AuthenticationService!
+
+    init(authService: AuthenticationService) {
+        self.authService = authService
+    }
+
+    func getFriends(for user: User, then handler: ((Result<[User], NetworkError>) -> Void)?) {
+        let endpoint = Endpoint.getFriends(token: authService.token, for: "\(user.id)")
 
         DataLoader.request(endpoint) { (loadingResult: Result<Data, NetworkError>) -> Void in
             let result: Result<[User], NetworkError>
@@ -18,14 +24,16 @@ final class FriendsService {
                 case .failure(let error):
                     result = .failure(error)
                 case .success(let data):
-                    if let users = try? JSONDecoder().decode(Response<FriendsContainer>.self, from: data).response.items {
+                    if let users = Response<FriendsContainer>.decode(from: data)?.items {
                         result = .success(users)
                     } else {
                         result = .failure(.invalidDataFormat)
                     }
             }
 
-            handler(result)
+            DispatchQueue.main.async {
+                handler?(result)
+            }
         }
     }
 }

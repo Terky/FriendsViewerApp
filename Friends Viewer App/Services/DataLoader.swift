@@ -7,11 +7,12 @@
 
 import Foundation
 
-final class DataLoader {
+struct DataLoader {
     static func request(_ endpoint: Endpoint,
                         then handler: @escaping (Result<Data, NetworkError>) -> Void) {
         guard let url = endpoint.url else {
-            return handler(.failure(.invalidUrl))
+            handler(.failure(.invalidUrl))
+            return
         }
 
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
