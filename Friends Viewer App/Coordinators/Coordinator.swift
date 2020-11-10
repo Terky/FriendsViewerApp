@@ -10,7 +10,5 @@ import UIKit
 protocol Coordinator: class {
     var navigationController: UINavigationController { get }
 
-    init(navigationController: UINavigationController)
-
     func start()
 }

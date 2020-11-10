@@ -8,6 +8,7 @@
 import Foundation
 
 public struct User: Codable, Hashable {
+    // swiftlint:disable identifier_name
     public let id: Int
     public let firstName: String
     public let lastName: String

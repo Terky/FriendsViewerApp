@@ -14,7 +14,7 @@ final class UserService {
         self.authService = authService
     }
 
-    func getUser(id userId: String? = nil, then handler: ((Result<User, NetworkError>) -> Void)?) -> Void {
+    func getUser(id userId: String? = nil, then handler: ((Result<User, NetworkError>) -> Void)?) {
         var endpoint = Endpoint.getUser(token: authService.token)
 
         if let userId = userId {
@@ -25,14 +25,14 @@ final class UserService {
             let result: Result<User, NetworkError>
 
             switch loadingResult {
-                case .failure(let error):
-                    result = .failure(error)
-                case .success(let data):
-                    if let user = Response<[User]>.decode(from: data)?.first {
-                        result = .success(user)
-                    } else {
-                        result = .failure(.invalidDataFormat)
-                    }
+            case .failure(let error):
+                result = .failure(error)
+            case .success(let data):
+                if let user = Response<[User]>.decode(from: data)?.first {
+                    result = .success(user)
+                } else {
+                    result = .failure(.invalidDataFormat)
+                }
             }
 
             DispatchQueue.main.async {

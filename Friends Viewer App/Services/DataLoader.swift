@@ -15,7 +15,7 @@ struct DataLoader {
             return
         }
 
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+        let task = URLSession.shared.dataTask(with: url) { data, _, error in
             defer {
                 handler(result)
             }

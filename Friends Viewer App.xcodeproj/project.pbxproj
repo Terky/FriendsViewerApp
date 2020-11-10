@@ -13,7 +13,6 @@
 		530812032553F6340058BFAE /* FriendsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530812022553F6340058BFAE /* FriendsContainer.swift */; };
 		5308120D255550130058BFAE /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5308120C255550130058BFAE /* Utils.swift */; };
 		534FB3FC2553348F00B81EEE /* ViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FB3FB2553348E00B81EEE /* ViewControllerExtension.swift */; };
-		534FB4012553353500B81EEE /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534FB4002553353500B81EEE /* LoadingViewController.swift */; };
 		5354F845255159810015798B /* CircularImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5354F844255159810015798B /* CircularImageView.swift */; };
 		5354F84A25515BBE0015798B /* FriendsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5354F84925515BBE0015798B /* FriendsListViewController.swift */; };
 		5354F84F255164500015798B /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5354F84E255164500015798B /* Cell.swift */; };
@@ -28,6 +27,8 @@
 		53765189254C49DF0067A817 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53765188254C49DF0067A817 /* UserService.swift */; };
 		53765194254C4ABE0067A817 /* UserConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53765193254C4ABE0067A817 /* UserConstants.swift */; };
 		538832E7254D7FB7004C6A73 /* ImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 538832E6254D7FB7004C6A73 /* ImageViewExtensions.swift */; };
+		53E09D472558680E00ACEF77 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E09D462558680E00ACEF77 /* LoginCoordinator.swift */; };
+		53E09D4F25586F1F00ACEF77 /* UserCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E09D4E25586F1F00ACEF77 /* UserCoordinator.swift */; };
 		53EEDF0E254B242B0039C5BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EEDF0D254B242B0039C5BC /* AppDelegate.swift */; };
 		53EEDF10254B242B0039C5BC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EEDF0F254B242B0039C5BC /* SceneDelegate.swift */; };
 		53EEDF15254B242B0039C5BC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 53EEDF13254B242B0039C5BC /* Main.storyboard */; };
@@ -68,7 +69,6 @@
 		530812022553F6340058BFAE /* FriendsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsContainer.swift; sourceTree = "<group>"; };
 		5308120C255550130058BFAE /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		534FB3FB2553348E00B81EEE /* ViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtension.swift; sourceTree = "<group>"; };
-		534FB4002553353500B81EEE /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		5354F844255159810015798B /* CircularImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularImageView.swift; sourceTree = "<group>"; };
 		5354F84925515BBE0015798B /* FriendsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListViewController.swift; sourceTree = "<group>"; };
 		5354F84E255164500015798B /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
@@ -83,6 +83,8 @@
 		53765188254C49DF0067A817 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		53765193254C4ABE0067A817 /* UserConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConstants.swift; sourceTree = "<group>"; };
 		538832E6254D7FB7004C6A73 /* ImageViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewExtensions.swift; sourceTree = "<group>"; };
+		53E09D462558680E00ACEF77 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
+		53E09D4E25586F1F00ACEF77 /* UserCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCoordinator.swift; sourceTree = "<group>"; };
 		53EEDF0A254B242B0039C5BC /* Friends Viewer App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Friends Viewer App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53EEDF0D254B242B0039C5BC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		53EEDF0F254B242B0039C5BC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -202,6 +204,8 @@
 			children = (
 				53EEDF40254B24430039C5BC /* Coordinator.swift */,
 				53EEDF45254B24680039C5BC /* MainCoordinator.swift */,
+				53E09D462558680E00ACEF77 /* LoginCoordinator.swift */,
+				53E09D4E25586F1F00ACEF77 /* UserCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -209,7 +213,6 @@
 		534FB40D25533B0400B81EEE /* Reusables */ = {
 			isa = PBXGroup;
 			children = (
-				534FB4002553353500B81EEE /* LoadingViewController.swift */,
 				5354F844255159810015798B /* CircularImageView.swift */,
 			);
 			path = Reusables;
@@ -315,6 +318,7 @@
 				53EEDF06254B242B0039C5BC /* Sources */,
 				53EEDF07254B242B0039C5BC /* Frameworks */,
 				53EEDF08254B242B0039C5BC /* Resources */,
+				537EEACC2559CE7900F1C5FB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -430,6 +434,26 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		537EEACC2559CE7900F1C5FB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		53EEDF06254B242B0039C5BC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -438,10 +462,10 @@
 				53687DBF254C4FE500886D8C /* DataLoader.swift in Sources */,
 				5376517E254C413D0067A817 /* User.swift in Sources */,
 				53765183254C49BC0067A817 /* FriendsService.swift in Sources */,
-				534FB4012553353500B81EEE /* LoadingViewController.swift in Sources */,
 				53EEDF53254B24A80039C5BC /* LoginViewController.swift in Sources */,
 				5354F84F255164500015798B /* Cell.swift in Sources */,
 				53765175254C401A0067A817 /* UserViewController.swift in Sources */,
+				53E09D472558680E00ACEF77 /* LoginCoordinator.swift in Sources */,
 				53EEDF62254B39B90039C5BC /* Endpoint.swift in Sources */,
 				530811FE2553EB3A0058BFAE /* FriendsConstants.swift in Sources */,
 				53EEDF41254B24430039C5BC /* Coordinator.swift in Sources */,
@@ -456,6 +480,7 @@
 				5354F845255159810015798B /* CircularImageView.swift in Sources */,
 				538832E7254D7FB7004C6A73 /* ImageViewExtensions.swift in Sources */,
 				5308120D255550130058BFAE /* Utils.swift in Sources */,
+				53E09D4F25586F1F00ACEF77 /* UserCoordinator.swift in Sources */,
 				530645A2254C2E36002FF1A9 /* AuthConstants.swift in Sources */,
 				53EEDF10254B242B0039C5BC /* SceneDelegate.swift in Sources */,
 				53765189254C49DF0067A817 /* UserService.swift in Sources */,

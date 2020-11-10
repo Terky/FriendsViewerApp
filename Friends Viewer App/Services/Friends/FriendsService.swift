@@ -21,14 +21,14 @@ final class FriendsService {
             let result: Result<[User], NetworkError>
 
             switch loadingResult {
-                case .failure(let error):
-                    result = .failure(error)
-                case .success(let data):
-                    if let users = Response<FriendsContainer>.decode(from: data)?.items {
-                        result = .success(users)
-                    } else {
-                        result = .failure(.invalidDataFormat)
-                    }
+            case .failure(let error):
+                result = .failure(error)
+            case .success(let data):
+                if let users = Response<FriendsContainer>.decode(from: data)?.items {
+                    result = .success(users)
+                } else {
+                    result = .failure(.invalidDataFormat)
+                }
             }
 
             DispatchQueue.main.async {

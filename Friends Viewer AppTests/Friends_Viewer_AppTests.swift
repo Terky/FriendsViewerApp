@@ -8,7 +8,7 @@
 import XCTest
 @testable import Friends_Viewer_App
 
-class Friends_Viewer_AppTests: XCTestCase {
+class FriendsViewerAppTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

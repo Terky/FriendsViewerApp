@@ -10,14 +10,25 @@ import UIKit
 final class FriendCell: UICollectionViewCell, Cell {
     typealias ItemType = User
 
-    private(set) var avaterView: UIImageView!
-    private(set) var nameView: UILabel!
+    private(set) lazy var avaterView: UIImageView = {
+        let imageView = CircularImageView()
+
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+
+        return imageView
+    }()
+
+    private(set) lazy var nameView: UILabel! = {
+        let nameView = UILabel()
+
+        nameView.translatesAutoresizingMaskIntoConstraints = false
+        nameView.font = .preferredFont(forTextStyle: .title3)
+
+        return nameView
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        avaterView = createAvatarView()
-        nameView = createNameView()
 
         contentView.addSubview(avaterView)
         contentView.addSubview(nameView)
@@ -29,32 +40,13 @@ final class FriendCell: UICollectionViewCell, Cell {
         preconditionFailure("Not implemented")
     }
 
-    func createAvatarView() -> UIImageView {
-        let imageView = CircularImageView()
-
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-
-        return imageView
-    }
-
-    func createNameView() -> UILabel {
-        let nameView = UILabel()
-
-        nameView.translatesAutoresizingMaskIntoConstraints = false
-        nameView.font = .preferredFont(forTextStyle: .title3)
-
-        return nameView
-    }
-
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            // Avatar constraints
             avaterView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10),
             avaterView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             avaterView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8),
             avaterView.widthAnchor.constraint(equalTo: avaterView.heightAnchor),
 
-            // Name constraints
             nameView.leftAnchor.constraint(equalTo: avaterView.rightAnchor, constant: 10),
             nameView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])

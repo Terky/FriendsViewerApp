@@ -8,51 +8,70 @@
 import UIKit
 
 final class FriendsListViewController: UIViewController, Storyboarded {
-    var coordinator: MainCoordinator?
+    var coordinator: UserCoordinator?
 
     var users: [User]? {
         didSet {
-            updateDataSource(with: users)
+            if let users = users {
+                updateDataSource(with: users)
+            }
         }
     }
 
-    private var collectionView: UICollectionView!
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, User> =
+        UICollectionViewDiffableDataSource<Int, User>(
+            collectionView: collectionView) { collectionView, indexPath, item in
+            guard let cell = collectionView
+                    .dequeueReusableCell(
+                        withReuseIdentifier: FriendCell.identifier,
+                        for: indexPath) as? FriendCell else {
+                fatalError("Unable to dequeue \(FriendCell.identifier)")
+            }
 
-    private var dataSource: UICollectionViewDiffableDataSource<Int, User>?
+            cell.configure(with: item)
+
+            return cell
+        }
+
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+
+        collectionView.backgroundColor = .systemBackground
+        collectionView.register(FriendCell.self, forCellWithReuseIdentifier: FriendCell.identifier)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.delegate = self
+
+        return collectionView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        createHierarcy()
-        createDataSource()
-
-        updateDataSource(with: users)
+        setupUI()
+        setupConstraints()
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        print(collectionView.contentOffset)
-    }
-
-    private func createHierarcy() {
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: FriendsListViewController.createLayout())
-
-        collectionView.backgroundColor = .systemBackground
-        collectionView.register(FriendCell.self, forCellWithReuseIdentifier: FriendCell.identifier)
-        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        collectionView.delegate = self
-
+    private func setupUI() {
         view.addSubview(collectionView)
+        collectionView.frame = view.bounds
     }
 
-    private static func createLayout() -> UICollectionViewLayout {
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+
+    private func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                             heightDimension: .fractionalHeight(1.0))
+                                              heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .fractionalWidth(0.2))
+                                               heightDimension: .fractionalWidth(0.2))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
                                                          subitems: [item])
 
@@ -60,20 +79,6 @@ final class FriendsListViewController: UIViewController, Storyboarded {
 
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
-    }
-
-    private func createDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Int, User>(collectionView: collectionView) {
-               collectionView, indexPath, item in
-               let cell = collectionView
-                   .dequeueReusableCell(
-                       withReuseIdentifier: FriendCell.identifier,
-                       for: indexPath) as! FriendCell
-
-               cell.configure(with: item)
-
-               return cell
-           }
     }
 
     private func updateDataSource(with items: [User]?) {
@@ -86,7 +91,7 @@ final class FriendsListViewController: UIViewController, Storyboarded {
         snapshot.appendSections([0])
         snapshot.appendItems(users)
 
-        dataSource?.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
 

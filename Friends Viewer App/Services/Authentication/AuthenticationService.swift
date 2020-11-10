@@ -13,15 +13,17 @@ class AuthenticationService {
 
     public private(set) var token: String!
 
-    public func authenticate(anchor vc: ASWebAuthenticationPresentationContextProviding, then handler: ((NetworkError?) -> Void)?) {
+    public func authenticate(anchor: ASWebAuthenticationPresentationContextProviding,
+                             then handler: ((NetworkError?) -> Void)?) {
         guard let authURL = Endpoint.auth().url else {
             handler?(.invalidUrl)
             return
         }
 
-        session = ASWebAuthenticationSession(url: authURL, callbackURLScheme: AuthConstants.callbackURI) {
-            [weak self] (callBack: URL?, error: Error?) in
-            var resultError: NetworkError? = nil
+        session = ASWebAuthenticationSession(url: authURL,
+                                             callbackURLScheme: AuthConstants.callbackURI)
+        { [weak self] (callBack: URL?, error: Error?) in
+            var resultError: NetworkError?
 
             defer {
                 DispatchQueue.main.async {
@@ -38,7 +40,7 @@ class AuthenticationService {
         }
 
 //        session?.prefersEphemeralWebBrowserSession = true
-        session?.presentationContextProvider = vc
+        session?.presentationContextProvider = anchor
         session?.start()
     }
 
